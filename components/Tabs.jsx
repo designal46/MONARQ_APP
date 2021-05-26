@@ -1,42 +1,35 @@
-import React, { useState, useContext} from 'react';
-import styled from 'styled-components';
-import { useIntrospection } from './IntrospectionContext.jsx'
+/* eslint-disable react/prop-types */
+import React from "react";
+import styled from "styled-components";
 
 const TabsWrapper = styled.section`
-  display:flex;
+  display: flex;
 `;
 
-const Tabs = props => {
+const Tabs = (props) => {
+  const { types } = props;
+  const { setCurrentTab } = props;
+  const tabsArray = [];
+  const handleClick = (id) => {
+    setCurrentTab(id);
+  };
 
-  const types = useIntrospection();
-  const tabsArray = [];  
-  const setCurrentTab = props;
+  Object.values(types).forEach((type) => {
+    if (type) {
+      tabsArray.push(
+        <button
+          type="button"
+          key={type.toString().toLowerCase()}
+          id={type}
+          onClick={(e) => handleClick(e.currentTarget.id)}
+        >
+          {Object.values(type)}
+        </button>
+      );
+    }
+  });
 
-  const handleClick = (id) =>{
-    setCurrentTab(id)
-  }
+  return <TabsWrapper>{tabsArray}</TabsWrapper>;
+};
 
-  console.log('log', setCurrentTab)
-
-    Object.values(types).forEach(type => {
-      if(type){
-        if(Object.values(type)) {
-          tabsArray.push(
-          <button 
-          key={Object.values(type)[0].toLowerCase()}
-          id ={Object.values(type)[0]}
-          onClick={(e)=> handleClick(e.currentTarget.id)}          
-          >{Object.values(type)[0]}</button>,          
-          )
-        }
-      }            
-  })
-  
-    return (      
-        <TabsWrapper>                 
-          {tabsArray}
-        </TabsWrapper>      
-    );
-  }
-
-  export default Tabs
+export default Tabs;

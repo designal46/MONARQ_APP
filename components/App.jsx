@@ -1,16 +1,13 @@
-import React from 'react';
-import { IntrospectionContextProvider } from './IntrospectionContext.jsx';
-import Visualizer from './Visualizer.jsx'
+import React from "react";
 
+import Visualizer from "./Visualizer";
 
- function App() {  
-    return (
-      <IntrospectionContextProvider>
-        <div>
-        <h1>Hey lol</h1>
-          <Visualizer props="lol" />
-        </div>    
-      </IntrospectionContextProvider>     
-    );
-  }
-   export default App;
+function App() {
+  return (
+    <div>
+      <h1>Hey lol</h1>
+      <Visualizer />
+    </div>
+  );
+}
+export default App;

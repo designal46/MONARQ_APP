@@ -1,132 +1,59 @@
-// import React, { useState, useEffect, useContext} from 'react';
-// import styled from 'styled-components'
+/* eslint-disable react/prop-types */
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 
+const DisplayWindow = styled.section`
+  display: flex;
+  flex-direction: column;
+`;
 
-// const Wrapper = styled.section`
-//   display:flex;
-//   flex-direction:column;   
-// `;
-// const TabsWrapper = styled.section`
-//   display:flex;
-// `;
-// const DisplayWindow = styled.section`
-//   display:flex;
-//   flex-direction:column;
-// `;
-// const CheckBox = styled.input`
-//   display:flex-inline;
-// `;
-// const Operation = styled.label`
-//   display:flex-inline  
-//   color:blue
-// `;
+const TabsPane = (props) => {
+  const { currentTab } = props;
+  const { operations } = props;
+  const { setOperation } = props;
 
-// const ConfigWrapper = styled.section`
-//   display:flex;
-// `;
+  const [checked, setChecked] = useState("");
 
-// const CodeWrapper = styled.section`
-//   display:flex;
-// `;
+  useEffect(() => {}, [currentTab]);
+  useEffect(() => {}, [checked]);
 
-// const Code = styled.code`
-//   background-colorg:black;
-// `;
-// const introspectionQuery = {"query" : "{__schema {queryType {name fields {name}}mutationType {name fields {name}}}}"};
+  const selectHandler = (evt) => {
+    setChecked(evt.target.value);
+    setOperation(evt.target.value);
+  };
+  const operationsObject = {};
 
-// const TabsPane = (props) => {  
+  operations.forEach((el) => {
+    operationsObject[el.name] = el.fields;
+  });
 
-//   console.log('TabsPane ', props)
-  
-//   const [userData, setUserData] = useState({});
-//   const [currentTab, setCurrentTab] = useState("");
-//   const [currentOperations, setCurrentOperations] = useState({})
-//   const [checked, setChecked] = useState(false)
+  const displayArray = [];
+  Object.keys(operationsObject).forEach((key) => {
+    if (key === currentTab) {
+      displayArray.push(
+        operationsObject[key].forEach((operation) => {
+          if (key === currentTab)
+            displayArray.push(
+              <div>
+                <input
+                  type="radio"
+                  id={`${key}`}
+                  value={`${operation.name}`}
+                  name="operation"
+                  key={`${operation.name}Button`}
+                  onClick={(evt) => selectHandler(evt)}
+                />
+                <label
+                  key={`${operation.name}Label`}
+                  htmlFor={`${operation.name}`}
+                >{`${operation.name}`}</label>
+              </div>
+            );
+        })
+      );
+    }
+  });
+  return <DisplayWindow>{displayArray}</DisplayWindow>;
+};
 
-//   useEffect(()=>{
-//   },[currentTab])
-
-//   useEffect(()=> {
-//     getIntrospection();
-//   }, [])
-
-//   const checkSwitch = () => {
-//     if(checked === false){
-      
-//     }
-//   }
-
-//   const getIntrospection = async () => {
-//     console.log('in introspection')
-//     const rawResponse = await fetch('https://api.spacex.land/graphql/', {
-//      method: 'POST',     
-//      headers: {
-//         'Accept': 'application/json',
-//         'Content-Type': 'application/json'
-//      },
-//       body: JSON.stringify(introspectionQuery),
-      
-//     });
-//     const response = await rawResponse.json();
-//     console.log(response)
-//     setUserData(response.data.__schema)
-//   }
-//   console.log(userData)
-//   const tabsArray = [];
-//   let displayedOperations = [];
-//   const operationsObj = {};
-  
-  
-  
-//     Object.values(userData).forEach(el => {
-//       if(el){
-//         if(Object.values(el)) {
-//           tabsArray.push(
-//           <button 
-//           key={Object.values(el)[0].toLowerCase()}
-//           id ={Object.values(el)[0]}
-//           onClick={(e)=> setCurrentTab(e.currentTarget.id)}
-          
-//           >{Object.values(el)[0]}</button>,
-          
-          
-//           )
-//           operationsObj[Object.values(el)[0]] = Object.values(el)[1]
-//         }
-//       }
-            
-//     })
-//   if(Object.keys(operationsObj).includes(currentTab)) {
-//     operationsObj[currentTab].forEach((el,idx)=>{displayedOperations.push(    
-//     <Operation>
-//       <CheckBox 
-//       type="checkbox" 
-//       className="checkbox" 
-//       id={`${currentTab}checkbox${idx}`} 
-//       onChange={()=> checkSwitch()}
-//       />
-//       {el.name}
-//     </Operation>,    
-//     )})
-//   }
-  
-  
-    
-  
-  
-
-//     return (
-//       <Wrapper>
-//         <TabsWrapper>          
-//           {tabsArray}
-//         </TabsWrapper>
-//         <DisplayWindow>
-//           {displayedOperations}
-//         </DisplayWindow>
-//         <CodeWrapper><Code>hey lol</Code></CodeWrapper>
-//       </Wrapper>    
-      
-//     );
-//   }
-
-//   export default TabsPane
+export default TabsPane;
